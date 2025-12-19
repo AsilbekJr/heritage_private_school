@@ -19,25 +19,25 @@ export default function Hero() {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Kelajak uchun
               <span className="block bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 ilhom beramiz
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+            <p className="text-sm md:text-xl text-gray-600 mb-8 leading-relaxed">
               Heritage School - bu zamonaviy ta'lim va an'anaviy qadriyatlarni
               birlashtirgan xususiy maktab. Biz har bir bolaning potentsialini
               ochishga yordam beramiz.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="bg-linear-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition transform hover:scale-105 flex items-center justify-center space-x-2">
+              <button className="bg-linear-to-r  from-emerald-500 to-teal-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full text-md md:text-lg font-semibold hover:shadow-2xl transition transform hover:scale-105 flex items-center justify-center space-x-2">
                 <span>Bepul Ekskursiya</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <button className="bg-white text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-emerald-200 hover:border-emerald-500 transition">
+              <button className="bg-white text-emerald-600 px-6 md:px-8 py-3 md:py-4 rounded-full text-md md:text-lgfont-semibold border-2 border-emerald-200 hover:border-emerald-500 transition">
                 Biz bilan bog'laning
               </button>
             </div>
