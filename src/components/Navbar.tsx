@@ -1,3 +1,5 @@
+import { getUsers } from "@/features/auth/authStorage";
+import type { User } from "@/features/auth/authTypes";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +9,11 @@ import { Link } from "react-router-dom";
 }
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // const user = useAppSelector((state) => state.auth.user);
+  const user: User[] = getUsers();
+  console.log("====================================");
+  console.log(user);
+  console.log("====================================");
   return (
     <nav className="bg-white/90 backdrop-blur-md shadow-sm fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,11 +60,23 @@ export default function Navbar() {
             >
               Aloqa
             </Link>
-            <Link to="login">
-              <button className="bg-linear-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full hover:shadow-lg transition transform hover:scale-105 font-semibold cursor-pointer">
-                Ro'yxatdan o'tish
-              </button>
-            </Link>
+
+            {user.length > 0 ? (
+              <div>
+                <Link
+                  to="/profile"
+                  className="bg-linear-to-r from-emerald-500 to-teal-600 text-white px-3 py-2 rounded-full hover:shadow-lg transition transform hover:scale-105 font-semibold cursor-pointer"
+                >
+                  <span className="text-gray-700">{user[0].fullName}</span>
+                </Link>
+              </div>
+            ) : (
+              <Link to="login">
+                <button className="bg-linear-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full hover:shadow-lg transition transform hover:scale-105 font-semibold cursor-pointer">
+                  Ro'yxatdan o'tish
+                </button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -102,11 +121,15 @@ export default function Navbar() {
             >
               Aloqa
             </Link>
-            <Link to="login">
-              <button className="w-full bg-linear-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full font-semibold cursor-pointer">
-                Ro'yxatdan o'tish
-              </button>
-            </Link>
+            {user.length > 0 ? (
+              ""
+            ) : (
+              <Link to="login">
+                <button className="w-full bg-linear-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full font-semibold cursor-pointer">
+                  Ro'yxatdan o'tish
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       )}

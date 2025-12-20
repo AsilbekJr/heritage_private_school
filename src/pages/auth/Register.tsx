@@ -1,3 +1,4 @@
+import { saveUsers } from "@/features/auth/authStorage";
 import {
   AlertCircle,
   Eye,
@@ -9,14 +10,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
-// interface Role {
-//   id: "student" | "teacher" | "admin";
-//   title: string;
-//   icon: string;
-//   description: string;
-//   color: string;
-// }
 
 interface StoredUser {
   fullName: string;
@@ -37,32 +30,10 @@ interface RegisterFormData {
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  // const [selectedRole, setSelectedRole] = useState<
-  //   "student" | "teacher" | "admin"
-  // >("student");
-  // const roles: Role[] = [
-  //   {
-  //     id: "student",
-  //     title: "O'quvchi",
-  //     icon: "🎓",
-  //     description: "O'quv jarayoniga kirish",
-  //     color: "from-emerald-500 to-green-600",
-  //   },
-  //   {
-  //     id: "teacher",
-  //     title: "O'qituvchi",
-  //     icon: "👨‍🏫",
-  //     description: "Darslar va baholar",
-  //     color: "from-teal-500 to-cyan-600",
-  //   },
-  //   {
-  //     id: "admin",
-  //     title: "Admin",
-  //     icon: "👨‍💼",
-  //     description: "To'liq boshqaruv",
-  //     color: "from-blue-500 to-indigo-600",
-  //   },
-  // ];
+  const hashPassword = (password: string): string => {
+    return btoa(password); // base64 (demo uchun)
+  };
+
   const registerForm = useForm<RegisterFormData>({
     defaultValues: {
       fullName: "",
@@ -73,61 +44,61 @@ export default function Register() {
       role: "student",
     },
   });
-  // const handleRoleSelect = (roleId: "student" | "teacher" | "admin"): void => {
-  //   setSelectedRole(roleId);
-  //   registerForm.setValue("role", roleId);
+
+  // const onRegisterSubmit = (data: RegisterFormData): void => {
+  //   const userData: StoredUser = {
+  //     fullName: data.fullName,
+  //     email: data.email,
+  //     phone: data.phone,
+  //     password: data.password,
+  //     // role: selectedRole,
+  //     createdAt: new Date().toISOString(),
+  //   };
+
+  //   const users: StoredUser[] = JSON.parse(
+  //     localStorage.getItem("heritage_users") || "[]"
+  //   );
+  //   users.push(userData);
+  //   localStorage.setItem("heritage_users", JSON.stringify(users));
+
+  //   console.log("Register:", userData);
+  //   alert(`Muvaffaqiyatli ro'yxatdan o'tdingiz!\nIsm: ${data.fullName}\n`);
+
+  //   registerForm.reset();
   // };
   const onRegisterSubmit = (data: RegisterFormData): void => {
-    const userData: StoredUser = {
-      fullName: data.fullName,
-      email: data.email,
-      phone: data.phone,
-      password: data.password,
-      // role: selectedRole,
-      createdAt: new Date().toISOString(),
-    };
-
     const users: StoredUser[] = JSON.parse(
       localStorage.getItem("heritage_users") || "[]"
     );
-    users.push(userData);
-    localStorage.setItem("heritage_users", JSON.stringify(users));
 
-    console.log("Register:", userData);
-    alert(`Muvaffaqiyatli ro'yxatdan o'tdingiz!\nIsm: ${data.fullName}\n`);
+    // 🔴 Telefon raqam takrorlanmasin
+    const phoneExists = users.some((user) => user.phone === data.phone);
+
+    if (phoneExists) {
+      alert("Bu telefon raqam bilan allaqachon ro‘yxatdan o‘tilgan");
+      return;
+    }
+
+    const newUser: StoredUser = {
+      fullName: data.fullName.trim(),
+      email: data.email.trim() || "",
+      phone: data.phone,
+      password: hashPassword(data.password),
+      createdAt: new Date().toISOString(),
+    };
+
+    users.push(newUser);
+    saveUsers(users);
+
+    alert(
+      `Muvaffaqiyatli ro'yxatdan o'tdingiz!\n\nIsm: ${newUser.fullName}\nTelefon: ${newUser.phone}`
+    );
 
     registerForm.reset();
   };
 
   return (
     <div className="space-y-5">
-      {/* Role Selection */}
-      {/* <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-3">
-          Rolni tanlang
-        </label>
-        <div className="grid grid-cols-3 gap-3">
-          {roles.map((role) => (
-            <button
-              key={role.id}
-              type="button"
-              onClick={() => handleRoleSelect(role.id)}
-              className={`p-4 rounded-xl border-2 transition text-center ${
-                selectedRole === role.id
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-gray-200 hover:border-emerald-300"
-              }`}
-            >
-              <div className="text-3xl mb-2">{role.icon}</div>
-              <div className="text-sm font-semibold text-gray-900">
-                {role.title}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div> */}
-
-      {/* Full Name */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">
           Ism Familiya
@@ -170,7 +141,6 @@ export default function Register() {
           <input
             type="email"
             {...registerForm.register("email", {
-              required: "Email kiritilishi shart",
               pattern: {
                 value: /\S+@\S+\.\S+/,
                 message: "Email formati noto'g'ri",
