@@ -40,8 +40,8 @@ export default function Contact() {
               <MapPin className="w-8 h-8" />
             </div>
             <h3 className="font-bold text-gray-900 mb-2">Manzil</h3>
-            <p className="text-gray-600">Toshkent shahri,</p>
-            <p className="text-gray-600">Chilonzor tumani</p>
+            <p className="text-gray-600">Buxoro shahri,</p>
+            <p className="text-gray-600">G'ijduvon tumani</p>
           </div>
         </div>
 

@@ -1,26 +1,57 @@
+// import { login } from "@/features/auth/authSlice";
+import { getUsers, setCurrentUser } from "@/features/auth/authStorage";
+import type { User } from "@/features/auth/authTypes";
 import { AlertCircle, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormData {
-  email: string;
+  phone: string;
   password: string;
   rememberMe?: boolean;
 }
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const onLoginSubmit = (data: LoginFormData): void => {
-    console.log("Login:", data);
-    alert(`Muvaffaqiyatli kirdingiz!\nEmail: ${data.email}`);
-  };
+  const navigate = useNavigate();
   const loginForm = useForm<LoginFormData>({
     defaultValues: {
-      email: "",
+      phone: "",
       password: "",
       rememberMe: false,
     },
   });
+
+  const hashPassword = (password: string): string => {
+    return btoa(password); // base64 (demo uchun)
+  };
+
+  const onLoginSubmit = (data: LoginFormData): void => {
+    try {
+      const users: User[] = getUsers();
+      const hashedPassword = hashPassword(data.password);
+
+      const foundUser = users.find(
+        (u) => u.phone === data.phone && u.password === hashedPassword
+      );
+
+      if (!foundUser) {
+        alert("Telefon yoki parol noto‘g‘ri");
+        return;
+      }
+      // login(data);
+      setCurrentUser(foundUser);
+      alert(`Muvaffaqiyatli kirdingiz!\nTelefon: ${data.phone}`);
+      setTimeout(() => {
+        navigate(`/`);
+      }, 500);
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Kirishda xato yuz berdi");
+    }
+  };
+
   return (
     <div className="space-y-5">
       {/* Email */}
@@ -31,26 +62,26 @@ export default function Login() {
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
-            type="email"
-            {...loginForm.register("email", {
-              required: "Email kiritilishi shart",
+            type="text"
+            {...loginForm.register("phone", {
+              required: "Telefon raqam kiritilishi shart",
               pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: "Email formati noto'g'ri",
+                value: /^\+998\d{9}$/,
+                message: "Telefon format: +998XXXXXXXXX",
               },
             })}
-            placeholder="example@heritage.uz"
+            placeholder="+998901234567"
             className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:border-emerald-500 transition ${
-              loginForm.formState.errors.email
+              loginForm.formState.errors.phone
                 ? "border-red-500"
                 : "border-gray-200"
             }`}
           />
         </div>
-        {loginForm.formState.errors.email && (
+        {loginForm.formState.errors.phone && (
           <div className="flex items-center space-x-1 text-red-500 text-sm mt-1">
             <AlertCircle className="w-4 h-4" />
-            <span>{loginForm.formState.errors.email.message}</span>
+            <span>{loginForm.formState.errors.phone.message}</span>
           </div>
         )}
       </div>

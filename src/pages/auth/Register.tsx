@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 interface StoredUser {
   fullName: string;
@@ -30,6 +31,7 @@ interface RegisterFormData {
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
   const hashPassword = (password: string): string => {
     return btoa(password); // base64 (demo uchun)
   };
@@ -45,30 +47,9 @@ export default function Register() {
     },
   });
 
-  // const onRegisterSubmit = (data: RegisterFormData): void => {
-  //   const userData: StoredUser = {
-  //     fullName: data.fullName,
-  //     email: data.email,
-  //     phone: data.phone,
-  //     password: data.password,
-  //     // role: selectedRole,
-  //     createdAt: new Date().toISOString(),
-  //   };
-
-  //   const users: StoredUser[] = JSON.parse(
-  //     localStorage.getItem("heritage_users") || "[]"
-  //   );
-  //   users.push(userData);
-  //   localStorage.setItem("heritage_users", JSON.stringify(users));
-
-  //   console.log("Register:", userData);
-  //   alert(`Muvaffaqiyatli ro'yxatdan o'tdingiz!\nIsm: ${data.fullName}\n`);
-
-  //   registerForm.reset();
-  // };
   const onRegisterSubmit = (data: RegisterFormData): void => {
     const users: StoredUser[] = JSON.parse(
-      localStorage.getItem("heritage_users") || "[]"
+      localStorage.getItem("user") || "[]"
     );
 
     // 🔴 Telefon raqam takrorlanmasin
@@ -95,6 +76,7 @@ export default function Register() {
     );
 
     registerForm.reset();
+    navigate("/login");
   };
 
   return (

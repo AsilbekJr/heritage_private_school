@@ -1,8 +1,20 @@
-import { getUsers } from "@/features/auth/authStorage";
+import { getCurrentUser, removeCurrentUser } from "@/features/auth/authStorage";
 import type { User } from "@/features/auth/authTypes";
+
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 {
   /* Navigation */
@@ -10,10 +22,14 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // const user = useAppSelector((state) => state.auth.user);
-  const user: User[] = getUsers();
-  console.log("====================================");
-  console.log(user);
-  console.log("====================================");
+  const user: User = getCurrentUser();
+
+  const handleLogout = () => {
+    setTimeout(() => {
+      removeCurrentUser();
+      window.location.reload();
+    }, 1000);
+  };
   return (
     <nav className="bg-white/90 backdrop-blur-md shadow-sm fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,14 +77,35 @@ export default function Navbar() {
               Aloqa
             </Link>
 
-            {user.length > 0 ? (
+            {user.fullName ? (
               <div>
-                <Link
-                  to="/profile"
-                  className="bg-linear-to-r from-emerald-500 to-teal-600 text-white px-3 py-2 rounded-full hover:shadow-lg transition transform hover:scale-105 font-semibold cursor-pointer"
-                >
-                  <span className="text-gray-700">{user[0].fullName}</span>
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Avatar>
+                      <AvatarImage src="https://avatars.githubusercontent.com/u/89327572?v=4&size=64" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="start">
+                    <DropdownMenuLabel>{user?.fullName}</DropdownMenuLabel>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>
+                        Profile
+                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        To'lovlar
+                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem onClick={() => handleLogout()}>
+                      Log out
+                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ) : (
               <Link to="login">
@@ -121,7 +158,7 @@ export default function Navbar() {
             >
               Aloqa
             </Link>
-            {user.length > 0 ? (
+            {user.fullName ? (
               ""
             ) : (
               <Link to="login">

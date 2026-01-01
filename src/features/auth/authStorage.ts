@@ -14,6 +14,9 @@ export const saveUsers = (user: User[]) => {
 export const setCurrentUser = (user: User) => {
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 };
+export const getCurrentUser = (): User => {
+  return JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || "{}");
+};
 
 export const removeCurrentUser = () => {
   localStorage.removeItem(CURRENT_USER_KEY);
