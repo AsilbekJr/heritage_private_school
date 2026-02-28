@@ -10,43 +10,42 @@ export default function Facilities() {
     "Xavfsiz transport xizmati",
   ];
   return (
-    <section id="facilities" className="py-20 px-4 bg-white">
+    <section id="facilities" className="py-20 lg:py-32 px-4 bg-white dark:bg-slate-950">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="order-2 lg:order-1">
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
               Zamonaviy Infratuzilma
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              O'quvchilarimiz uchun eng yaxshi sharoitlar yaratdik. Har bir sinf
-              va xona zamonaviy jihozlar bilan ta'minlangan.
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
+              O'quvchilarimiz uchun eng yaxshi sharoitlarni yaratdik. Har bir sinf
+              va xona eng so'nggi texnologiyalar bilan ta'minlangan bo'lib, xavfsiz va rag'batlantiruvchi muhitni taqdim etadi.
             </p>
 
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {facilities.map((facility, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-4 bg-emerald-50 p-4 rounded-xl border border-emerald-100"
+                  className="flex items-center space-x-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-emerald-200 dark:hover:border-emerald-500/30 transition-colors duration-300"
                 >
-                  <CheckCircle className="w-6 h-6 text-emerald-600 shrink-0" />
-                  <span className="text-gray-800 font-medium">{facility}</span>
+                  <CheckCircle className="w-5 h-5 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                  <span className="text-slate-700 dark:text-slate-300 font-medium text-sm">{facility}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-linear-to-br from-emerald-400 to-teal-500 rounded-3xl h-96 shadow-2xl flex items-center justify-center">
-            {/* <div className="text-white text-center p-8">
-              <Award className="w-32 h-32 mx-auto mb-4 opacity-20" />
-              <p className="text-2xl font-semibold opacity-80">
-                Maktab Infratuzilmasi
-              </p>
-            </div> */}
-            <img
-              src="./infratuzilma.png "
-              alt="facilities_image"
-              className="rounded-3xl  object-cover h-full w-full shadow-2xl"
-            />
+          <div className="order-1 lg:order-2 relative">
+            <div className="aspect-[4/3] sm:aspect-video lg:aspect-square rounded-3xl overflow-hidden shadow-2xl relative z-10 bg-slate-100 dark:bg-slate-800 ring-1 ring-slate-900/5 dark:ring-white/10">
+              <img
+                src="./infratuzilma.png"
+                alt="Maktab infratuzilmasi"
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </div>
+            {/* Minimal Decorative Elements */}
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-emerald-400/10 dark:bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-teal-400/10 dark:bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
           </div>
         </div>
       </div>
